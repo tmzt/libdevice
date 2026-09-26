@@ -133,6 +133,14 @@ impl Device {
         block_on(Self::new(config))
     }
 
+    /// Synchronous constructor using an instance selected by an external harness.
+    pub fn new_blocking_with_instance(
+        instance: wgpu::Instance,
+        config: DeviceConfig,
+    ) -> Result<Self, DeviceError> {
+        block_on(Self::new_with_surface(instance, config, None))
+    }
+
     /// Synchronous constructor for a device that will present through a surface.
     pub fn new_blocking_with_surface(
         instance: wgpu::Instance,
