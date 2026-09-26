@@ -112,7 +112,10 @@ impl Device {
             .request_device(&wgpu::DeviceDescriptor {
                 label: Some("sigilweaver-device"),
                 required_features: wgpu::Features::empty(),
-                required_limits: wgpu::Limits::downlevel_defaults(),
+                required_limits: wgpu::Limits {
+                    max_storage_buffers_per_shader_stage: 8,
+                    ..wgpu::Limits::downlevel_defaults()
+                },
                 memory_hints: wgpu::MemoryHints::Performance,
                 ..Default::default()
             })
@@ -153,6 +156,10 @@ impl Device {
     #[must_use]
     pub const fn geometry(&self) -> PortraitGeometry {
         self.geometry
+    }
+
+    pub fn set_geometry(&mut self, geometry: PortraitGeometry) {
+        self.geometry = geometry;
     }
 
     #[must_use]
