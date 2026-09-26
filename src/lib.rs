@@ -82,13 +82,27 @@ pub struct Device {
 impl Device {
     /// Acquire a GPU-backed device using the supplied simulator configuration.
     pub async fn new(config: DeviceConfig) -> Result<Self, DeviceError> {
+        Self::new_with_surface(Self::create_instance(), config, None).await
+    }
+
+    /// Create an instance that can be used to create a window surface.
+    #[must_use]
+    pub fn create_instance() -> wgpu::Instance {
         let mut instance_descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
         instance_descriptor.backends = wgpu::Backends::PRIMARY;
-        let instance = wgpu::Instance::new(instance_descriptor);
+        wgpu::Instance::new(instance_descriptor)
+    }
+
+    /// Acquire a device, optionally selecting an adapter compatible with a surface.
+    pub async fn new_with_surface(
+        instance: wgpu::Instance,
+        config: DeviceConfig,
+        surface: Option<&wgpu::Surface<'_>>,
+    ) -> Result<Self, DeviceError> {
         let adapter = instance
             .request_adapter(&wgpu::RequestAdapterOptions {
                 power_preference: wgpu::PowerPreference::HighPerformance,
-                compatible_surface: None,
+                compatible_surface: surface,
                 force_fallback_adapter: config.force_fallback_adapter,
                 apply_limit_buckets: false,
             })
@@ -119,6 +133,15 @@ impl Device {
         block_on(Self::new(config))
     }
 
+    /// Synchronous constructor for a device that will present through a surface.
+    pub fn new_blocking_with_surface(
+        instance: wgpu::Instance,
+        config: DeviceConfig,
+        surface: &wgpu::Surface<'_>,
+    ) -> Result<Self, DeviceError> {
+        block_on(Self::new_with_surface(instance, config, Some(surface)))
+    }
+
     #[must_use]
     pub const fn geometry(&self) -> PortraitGeometry {
         self.geometry
@@ -127,6 +150,11 @@ impl Device {
     #[must_use]
     pub fn adapter_info(&self) -> wgpu::AdapterInfo {
         self.adapter.get_info()
+    }
+
+    #[must_use]
+    pub fn surface_capabilities(&self, surface: &wgpu::Surface<'_>) -> wgpu::SurfaceCapabilities {
+        surface.get_capabilities(&self.adapter)
     }
 
     #[must_use]
