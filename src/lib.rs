@@ -112,8 +112,18 @@ impl Device {
             .request_device(&wgpu::DeviceDescriptor {
                 label: Some("sigilweaver-device"),
                 required_features: wgpu::Features::empty(),
+                // Downlevel defaults, raised to whatever the adapter allows for
+                // the one dimension a render asks for. `--render` wants frames
+                // past the default 2048 a side, and the limit is the only thing
+                // standing in the way - a texture larger than the hardware takes
+                // is refused by the adapter anyway, so asking for its own figure
+                // cannot over-reach.
                 required_limits: wgpu::Limits {
                     max_storage_buffers_per_shader_stage: 8,
+                    max_texture_dimension_2d: adapter
+                        .limits()
+                        .max_texture_dimension_2d
+                        .max(wgpu::Limits::downlevel_defaults().max_texture_dimension_2d),
                     ..wgpu::Limits::downlevel_defaults()
                 },
                 memory_hints: wgpu::MemoryHints::Performance,
