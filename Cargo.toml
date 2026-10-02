@@ -4,6 +4,12 @@ description = "Deterministic offscreen GPU device simulation for Sigilweaver"
 edition.workspace = true
 license.workspace = true
 version.workspace = true
+build = "build.rs"
 
 [dependencies]
+bytemuck.workspace = true
+glam.workspace = true
 wgpu.workspace = true
+
+[build-dependencies]
+naga.workspace = true
