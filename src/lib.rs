@@ -4,8 +4,6 @@
 //! contract independent of a windowing toolkit while matching the target
 //! portrait geometry used by the eventual touch overlay.
 
-pub mod instance;
-
 use std::fmt;
 use std::pin::Pin;
 use std::task::{Context, Poll, RawWaker, RawWakerVTable, Waker};
