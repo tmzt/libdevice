@@ -1,9 +1,13 @@
 [package]
 name = "libdevice"
-description = "Deterministic offscreen GPU device simulation for Sigilweaver"
-edition.workspace = true
-license.workspace = true
-version.workspace = true
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+description = "Deterministic offscreen GPU device setup for simulating a mobile display on wgpu"
+repository = "https://github.com/tmzt/libdevice"
+readme = "README.md"
+keywords = ["wgpu", "gpu", "simulator", "offscreen", "headless"]
+categories = ["graphics", "rendering"]
 
 [dependencies]
-wgpu.workspace = true
+wgpu = "30.0.1"

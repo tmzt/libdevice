@@ -110,7 +110,7 @@ impl Device {
             .map_err(|_| DeviceError::AdapterUnavailable)?;
         let (device, queue) = adapter
             .request_device(&wgpu::DeviceDescriptor {
-                label: Some("sigilweaver-device"),
+                label: Some("libdevice"),
                 required_features: wgpu::Features::empty(),
                 // Downlevel defaults, raised to whatever the adapter allows for
                 // the one dimension a render asks for. `--render` wants frames
