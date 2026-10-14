@@ -3,21 +3,11 @@ name = "libdevice"
 version = "0.1.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
-description = "Simulated mobile display geometry, with optional deterministic offscreen wgpu device setup"
+description = "Simulated mobile device data (geometry, insets, cutouts, corners) and --device argument parsing"
 repository = "https://github.com/tmzt/libdevice"
 readme = "README.md"
-keywords = ["wgpu", "gpu", "simulator", "offscreen", "headless"]
-categories = ["graphics", "rendering"]
-
-[features]
-default = []
-wgpu = ["dep:wgpu"]
-
-[dependencies]
-wgpu = { version = "30.0.1", optional = true }
+keywords = ["simulator", "mobile", "insets", "safe-area", "device"]
+categories = ["simulation", "command-line-interface"]
 
 [build-dependencies]
 toml = { version = "1.1.8", default-features = false, features = ["parse", "preserve_order", "serde"] }
-
-[package.metadata.docs.rs]
-all-features = true

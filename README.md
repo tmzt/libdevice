@@ -1,26 +1,17 @@
 # libdevice
 
-Simulated mobile display geometry, with optional deterministic offscreen GPU device setup on [`wgpu`](https://github.com/gfx-rs/wgpu).
+Data describing simulated mobile devices — screen geometry, pixel ratio, insets, cutouts and display corners — compiled from [`devices.toml`](devices.toml) into const data, plus helpers for selecting and overriding a device from `--device` command-line options.
 
-By default `libdevice` is data only: the geometry and specifics of the simulated device, with no GPU dependency. With the `wgpu` feature it also acquires a `wgpu` adapter, device and queue with a fixed, predictable set of limits, and pairs them with the pixel geometry of a simulated portrait screen. It renders offscreen by default, so the device contract stays independent of any windowing toolkit, but it can also select an adapter compatible with a window surface when you want to present.
+`libdevice` has no runtime dependencies and no GPU or windowing code; renderers own their own GPU handles and read the device data from here.
 
 ## Features
 
 - **Device specifics** — each device in [`devices.toml`](devices.toml) is compiled into a `DeviceSpec` const (`GALAXY_S24`), listed in `DEVICES` and found by key with `DeviceSpec::by_id`. The first entry is `DEFAULT_DEVICE`.
 - **Insets, cutouts and corners** — every Android `WindowInsets` type is stored per device, and `DeviceSpec::insets(InsetType::…)` also derives the combined types (`SystemBars`, `SafeDrawing`, `SafeGestures`, `SafeContent`), the iOS safe area and CSS `env(safe-area-inset-*)`; `css_safe_area()` gives the latter in CSS pixels. Cutouts are circles, capsules, notches, rectangles or SVG paths, and corners are circular (Android) or continuous (iOS).
-- **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` (1080×2340) is the default.
-
-With the `wgpu` feature:
-
-- **Predictable limits** — downlevel defaults, with `max_texture_dimension_2d` raised to whatever the adapter supports so large frames can be rendered.
-- **Offscreen targets** — `Device::create_color_target` allocates an `Rgba8Unorm` texture matching the geometry, usable as a render attachment and copy source.
-- **Optional surfaces** — `new_with_surface` / `new_blocking_with_surface` pick an adapter that can present to a given `wgpu::Surface`.
-- **Blocking constructors** — `new_blocking*` variants for tests and native tools, with no async runtime dependency.
-- **Resizable** — `set_geometry` keeps the simulated geometry in sync with a resized window.
+- **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` is the S24's (1080×2340).
+- **Command-line selection** — `--device <name>` and `--device-*` overrides, parsed from filtered options or extracted from a full argument list, under any prefix.
 
 ## Usage
-
-For the device data only:
 
 ```toml
 [dependencies]
@@ -50,37 +41,6 @@ let (device, rest) = libdevice::DeviceSpec::extract_args(std::env::args())?;
 // From options already split out, with or without the prefix:
 let device = libdevice::DeviceSpec::parse_args(["--device=iphone_15", "--status-bars-top=180"])?;
 ```
-
-For the GPU device, enable the `wgpu` feature:
-
-```toml
-[dependencies]
-libdevice = { git = "https://github.com/tmzt/libdevice", features = ["wgpu"] }
-```
-
-```rust
-use libdevice::{Device, DeviceConfig};
-
-fn main() -> Result<(), libdevice::DeviceError> {
-    let device = Device::new_blocking(DeviceConfig::default())?;
-    println!("adapter: {:?}", device.adapter_info().name);
-
-    let target = device.create_color_target("frame");
-    // Render into `target` with device.device() / device.queue(),
-    // then copy it out for comparison or screenshots.
-    Ok(())
-}
-```
-
-To present to a window, create the instance first so the surface and device share it:
-
-```rust
-let instance = libdevice::Device::create_instance();
-let surface = instance.create_surface(window)?;
-let device = libdevice::Device::new_blocking_with_surface(instance, config, &surface)?;
-```
-
-Set `DeviceConfig::force_fallback_adapter` to request a software adapter (useful on CI machines without a GPU).
 
 ## License
 

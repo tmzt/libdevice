@@ -1,20 +1,15 @@
-//! Deterministic device setup for the desktop-backed mobile simulator.
+//! Data describing simulated mobile devices.
 //!
-//! By default the crate is data only: the simulated screen's geometry and
-//! device specifics, with no GPU dependency. The `wgpu` feature adds the
-//! offscreen `Device`, which keeps the device contract independent of a
-//! windowing toolkit while matching the target portrait geometry used by the
-//! eventual touch overlay.
+//! Each device in `devices.toml` is compiled into a const [`DeviceSpec`]: its
+//! portrait geometry, pixel ratio, insets, cutouts and display corners.
+//! [`DeviceSpec::parse_args`] and [`DeviceSpec::extract_args`] select and
+//! override one from `--device` command-line options.
 
 mod args;
-#[cfg(feature = "wgpu")]
-mod gpu;
 mod insets;
 
 pub use args::{DEFAULT_PREFIX, DEVICE_ARGS_HELP, DeviceArgsError, device_args_help};
 
-#[cfg(feature = "wgpu")]
-pub use gpu::{Device, DeviceConfig, DeviceError};
 pub use insets::{
     CornerShape, Corners, Cutout, CutoutShape, Edge, InsetType, Insets, LogicalInsets, Platform,
     Rect, SystemInsets,
@@ -70,18 +65,6 @@ impl DeviceSpec {
 pub struct PortraitGeometry {
     pub width: u32,
     pub height: u32,
-}
-
-#[cfg(feature = "wgpu")]
-impl PortraitGeometry {
-    #[must_use]
-    pub const fn extent(self) -> wgpu::Extent3d {
-        wgpu::Extent3d {
-            width: self.width,
-            height: self.height,
-            depth_or_array_layers: 1,
-        }
-    }
 }
 
 #[cfg(test)]
@@ -157,25 +140,5 @@ mod tests {
         assert_eq!(GALAXY_S24.corners.shape, CornerShape::Circular);
         assert_eq!(IPHONE_15.platform, Platform::Ios);
         assert_eq!(IPHONE_15.corners.shape, CornerShape::Continuous);
-    }
-}
-
-#[cfg(all(test, feature = "wgpu"))]
-mod extent_tests {
-    use super::{GALAXY_S24_PORTRAIT, PortraitGeometry};
-
-    #[test]
-    fn s24_extent_is_single_layer() {
-        assert_eq!(GALAXY_S24_PORTRAIT.extent().depth_or_array_layers, 1);
-    }
-
-    #[test]
-    fn custom_geometry_produces_matching_extent() {
-        let geometry = PortraitGeometry {
-            width: 320,
-            height: 640,
-        };
-        assert_eq!(geometry.extent().width, 320);
-        assert_eq!(geometry.extent().height, 640);
     }
 }
