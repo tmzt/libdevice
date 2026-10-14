@@ -8,9 +8,14 @@
 
 #[cfg(feature = "wgpu")]
 mod gpu;
+mod insets;
 
 #[cfg(feature = "wgpu")]
 pub use gpu::{Device, DeviceConfig, DeviceError};
+pub use insets::{
+    CornerShape, Corners, Cutout, CutoutShape, Edge, InsetType, Insets, LogicalInsets, Platform,
+    Rect, SystemInsets,
+};
 
 include!(concat!(env!("OUT_DIR"), "/devices.rs"));
 
@@ -18,13 +23,21 @@ include!(concat!(env!("OUT_DIR"), "/devices.rs"));
 pub const GALAXY_S24_PORTRAIT: PortraitGeometry = GALAXY_S24.geometry;
 
 /// Specifics of a simulated device, generated from `devices.toml`.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+///
+/// Every length is in physical pixels of the portrait display.
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct DeviceSpec {
     /// The device's key in `devices.toml`.
     pub id: &'static str,
     /// Human-readable device name.
     pub name: &'static str,
+    pub platform: Platform,
     pub geometry: PortraitGeometry,
+    /// Physical pixels per dp, iOS point or CSS pixel.
+    pub pixel_ratio: f32,
+    pub insets: SystemInsets,
+    pub cutouts: &'static [Cutout],
+    pub corners: Corners,
 }
 
 impl DeviceSpec {
@@ -32,6 +45,20 @@ impl DeviceSpec {
     #[must_use]
     pub fn by_id(id: &str) -> Option<Self> {
         DEVICES.iter().copied().find(|device| device.id == id)
+    }
+
+    /// The insets of one type, combining stored types where it is a union.
+    #[must_use]
+    pub const fn insets(&self, inset_type: InsetType) -> Insets {
+        self.insets.get(inset_type)
+    }
+
+    /// `env(safe-area-inset-*)` in CSS pixels, for a full-screen page with
+    /// `viewport-fit=cover`.
+    #[must_use]
+    pub fn css_safe_area(&self) -> LogicalInsets {
+        self.insets(InsetType::CssSafeArea)
+            .to_logical(self.pixel_ratio)
     }
 }
 
@@ -56,7 +83,10 @@ impl PortraitGeometry {
 
 #[cfg(test)]
 mod tests {
-    use super::{DEFAULT_DEVICE, DEVICES, DeviceSpec, GALAXY_S24};
+    use super::{
+        CornerShape, CutoutShape, DEFAULT_DEVICE, DEVICES, DeviceSpec, GALAXY_S24, IPHONE_15,
+        InsetType, Insets, Platform,
+    };
 
     #[test]
     fn s24_matches_devices_toml() {
@@ -72,6 +102,58 @@ mod tests {
             assert_eq!(DeviceSpec::by_id(device.id), Some(*device));
         }
         assert_eq!(DeviceSpec::by_id("missing"), None);
+    }
+
+    #[test]
+    fn display_cutout_is_derived_from_cutouts() {
+        let [hole] = GALAXY_S24.cutouts else {
+            panic!("expected one cutout");
+        };
+        assert_eq!(hole.shape, CutoutShape::Circle);
+        assert_eq!(
+            GALAXY_S24.insets(InsetType::DisplayCutout),
+            Insets {
+                top: hole.bounds.y + hole.bounds.height,
+                ..Insets::ZERO
+            }
+        );
+    }
+
+    #[test]
+    fn explicit_display_cutout_is_kept() {
+        assert_eq!(IPHONE_15.insets(InsetType::DisplayCutout).top, 177);
+    }
+
+    #[test]
+    fn combined_types_union_their_parts() {
+        let insets = GALAXY_S24.insets;
+        assert_eq!(
+            GALAXY_S24.insets(InsetType::SystemBars),
+            insets.status_bars.union(insets.navigation_bars)
+        );
+        assert_eq!(
+            GALAXY_S24.insets(InsetType::SafeContent),
+            GALAXY_S24
+                .insets(InsetType::SafeDrawing)
+                .union(GALAXY_S24.insets(InsetType::SafeGestures))
+        );
+    }
+
+    #[test]
+    fn iphone_safe_area_matches_uikit() {
+        let safe_area = IPHONE_15
+            .insets(InsetType::IosSafeArea)
+            .to_logical(IPHONE_15.pixel_ratio);
+        assert_eq!((safe_area.top, safe_area.bottom), (59.0, 34.0));
+        assert_eq!(IPHONE_15.css_safe_area(), safe_area);
+    }
+
+    #[test]
+    fn corner_shape_defaults_to_platform_curve() {
+        assert_eq!(GALAXY_S24.platform, Platform::Android);
+        assert_eq!(GALAXY_S24.corners.shape, CornerShape::Circular);
+        assert_eq!(IPHONE_15.platform, Platform::Ios);
+        assert_eq!(IPHONE_15.corners.shape, CornerShape::Continuous);
     }
 }
 

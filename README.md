@@ -7,6 +7,7 @@ By default `libdevice` is data only: the geometry and specifics of the simulated
 ## Features
 
 - **Device specifics** — each device in [`devices.toml`](devices.toml) is compiled into a `DeviceSpec` const (`GALAXY_S24`), listed in `DEVICES` and found by key with `DeviceSpec::by_id`. The first entry is `DEFAULT_DEVICE`.
+- **Insets, cutouts and corners** — every Android `WindowInsets` type is stored per device, and `DeviceSpec::insets(InsetType::…)` also derives the combined types (`SystemBars`, `SafeDrawing`, `SafeGestures`, `SafeContent`), the iOS safe area and CSS `env(safe-area-inset-*)`; `css_safe_area()` gives the latter in CSS pixels. Cutouts are circles, capsules, notches, rectangles or SVG paths, and corners are circular (Android) or continuous (iOS).
 - **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` (1080×2340) is the default.
 
 With the `wgpu` feature:
@@ -27,8 +28,13 @@ libdevice = { git = "https://github.com/tmzt/libdevice" }
 ```
 
 ```rust
-let screen = libdevice::GALAXY_S24_PORTRAIT;
+use libdevice::{GALAXY_S24, InsetType};
+
+let screen = GALAXY_S24.geometry;
 println!("{}x{}", screen.width, screen.height);
+
+let safe = GALAXY_S24.insets(InsetType::SafeDrawing); // physical pixels
+let css = GALAXY_S24.css_safe_area();                // CSS pixels
 ```
 
 For the GPU device, enable the `wgpu` feature:

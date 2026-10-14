@@ -2,10 +2,83 @@
 #
 # Each table is one device. Its key becomes the const name in upper case
 # (`galaxy_s24` -> `libdevice::GALAXY_S24`), and the first table is the
-# default device.
+# default device. All lengths are physical pixels of the portrait display.
+#
+#   platform     "android" or "ios"
+#   pixel_ratio  physical pixels per dp / point / CSS pixel
+#
+#   [<device>.insets]  Android WindowInsets types, each `{ top, right, bottom,
+#                      left }` with missing sides zero and missing types zero:
+#     status_bars, navigation_bars (iOS home indicator), caption_bar,
+#     system_gestures, mandatory_system_gestures, tappable_element, waterfall,
+#     display_cutout (derived from the cutouts and waterfall when omitted)
+#
+#   [[<device>.cutouts]]  edge = "top" | "right" | "bottom" | "left"
+#                         x, y, width, height = bounding box
+#                         shape = "circle" | "capsule" | "rect"
+#                               | "notch" (with corner_radius)
+#                               | "path"  (with path, an SVG path in pixels)
+#
+#   [<device>.corners]  radius, or per-corner top_left / top_right /
+#                       bottom_right / bottom_left overriding it, and
+#                       shape = "circular" | "continuous" (defaults to
+#                       continuous on iOS, circular on Android). A bare
+#                       `corners = 110` sets all four.
 
+# ESTIMATED: these figures are not measured from hardware. Confirm against
+# `adb shell dumpsys window` (insets, cutout) and `dumpsys display` (corners)
+# on a real S24.
 [galaxy_s24]
 name = "Samsung Galaxy S24"
-# Portrait pixel dimensions.
+platform = "android"
 width = 1080
 height = 2340
+pixel_ratio = 2.8125 # density 450, a 384 x 832 CSS viewport
+
+[galaxy_s24.insets]
+status_bars = { top = 110 }
+# Three-button navigation, Samsung's default: 48dp.
+navigation_bars = { bottom = 135 }
+system_gestures = { top = 110, bottom = 135 }
+mandatory_system_gestures = { top = 110, bottom = 135 }
+tappable_element = { top = 110, bottom = 135 }
+
+[[galaxy_s24.cutouts]]
+edge = "top"
+shape = "circle"
+x = 517
+y = 31
+width = 46
+height = 46
+
+[galaxy_s24.corners]
+radius = 110
+
+# Safe area and corner radius from UIKit's published figures (59pt top, 34pt
+# bottom, 55pt corners); the Dynamic Island bounds are approximate.
+[iphone_15]
+name = "Apple iPhone 15"
+platform = "ios"
+width = 1179
+height = 2556
+pixel_ratio = 3
+
+[iphone_15.insets]
+status_bars = { top = 162 }
+# The home indicator.
+navigation_bars = { bottom = 102 }
+system_gestures = { bottom = 102 }
+mandatory_system_gestures = { bottom = 102 }
+# The safe area clears the island by more than its bounds.
+display_cutout = { top = 177 }
+
+[[iphone_15.cutouts]]
+edge = "top"
+shape = "capsule"
+x = 400
+y = 33
+width = 378
+height = 112
+
+[iphone_15.corners]
+radius = 165
