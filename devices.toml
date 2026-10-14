@@ -1,0 +1,11 @@
+# Simulated device specifics, compiled into const data by build.rs.
+#
+# Each table is one device. Its key becomes the const name in upper case
+# (`galaxy_s24` -> `libdevice::GALAXY_S24`), and the first table is the
+# default device.
+
+[galaxy_s24]
+name = "Samsung Galaxy S24"
+# Portrait pixel dimensions.
+width = 1080
+height = 2340

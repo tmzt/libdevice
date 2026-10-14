@@ -6,6 +6,7 @@ By default `libdevice` is data only: the geometry and specifics of the simulated
 
 ## Features
 
+- **Device specifics** — each device in [`devices.toml`](devices.toml) is compiled into a `DeviceSpec` const (`GALAXY_S24`), listed in `DEVICES` and found by key with `DeviceSpec::by_id`. The first entry is `DEFAULT_DEVICE`.
 - **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` (1080×2340) is the default.
 
 With the `wgpu` feature:
