@@ -1,12 +1,15 @@
 # libdevice
 
-Deterministic offscreen GPU device setup for simulating a mobile display on [`wgpu`](https://github.com/gfx-rs/wgpu).
+Simulated mobile display geometry, with optional deterministic offscreen GPU device setup on [`wgpu`](https://github.com/gfx-rs/wgpu).
 
-`libdevice` acquires a `wgpu` adapter, device and queue with a fixed, predictable set of limits, and pairs them with the pixel geometry of a simulated portrait screen. It renders offscreen by default, so the device contract stays independent of any windowing toolkit, but it can also select an adapter compatible with a window surface when you want to present.
+By default `libdevice` is data only: the geometry and specifics of the simulated device, with no GPU dependency. With the `wgpu` feature it also acquires a `wgpu` adapter, device and queue with a fixed, predictable set of limits, and pairs them with the pixel geometry of a simulated portrait screen. It renders offscreen by default, so the device contract stays independent of any windowing toolkit, but it can also select an adapter compatible with a window surface when you want to present.
 
 ## Features
 
 - **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` (1080×2340) is the default.
+
+With the `wgpu` feature:
+
 - **Predictable limits** — downlevel defaults, with `max_texture_dimension_2d` raised to whatever the adapter supports so large frames can be rendered.
 - **Offscreen targets** — `Device::create_color_target` allocates an `Rgba8Unorm` texture matching the geometry, usable as a render attachment and copy source.
 - **Optional surfaces** — `new_with_surface` / `new_blocking_with_surface` pick an adapter that can present to a given `wgpu::Surface`.
@@ -15,9 +18,23 @@ Deterministic offscreen GPU device setup for simulating a mobile display on [`wg
 
 ## Usage
 
+For the device data only:
+
 ```toml
 [dependencies]
 libdevice = { git = "https://github.com/tmzt/libdevice" }
+```
+
+```rust
+let screen = libdevice::GALAXY_S24_PORTRAIT;
+println!("{}x{}", screen.width, screen.height);
+```
+
+For the GPU device, enable the `wgpu` feature:
+
+```toml
+[dependencies]
+libdevice = { git = "https://github.com/tmzt/libdevice", features = ["wgpu"] }
 ```
 
 ```rust
