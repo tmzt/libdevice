@@ -6,9 +6,12 @@
 //! windowing toolkit while matching the target portrait geometry used by the
 //! eventual touch overlay.
 
+mod args;
 #[cfg(feature = "wgpu")]
 mod gpu;
 mod insets;
+
+pub use args::{DEFAULT_PREFIX, DEVICE_ARGS_HELP, DeviceArgsError, device_args_help};
 
 #[cfg(feature = "wgpu")]
 pub use gpu::{Device, DeviceConfig, DeviceError};

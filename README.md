@@ -37,6 +37,20 @@ let safe = GALAXY_S24.insets(InsetType::SafeDrawing); // physical pixels
 let css = GALAXY_S24.css_safe_area();                // CSS pixels
 ```
 
+### Command-line device selection
+
+`--device <name>` (or `--device-device <name>`) picks a device by its `devices.toml` key (`galaxy_s24`, `galaxy-s24` and `GALAXY_S24` all work) and `--device-*` options override its fields; `DEVICE_ARGS_HELP` has the full list.
+
+Wrappers with their own option prefix use `parse_args_with_prefix` / `extract_args_with_prefix`: with `"sim"`, `--sim <name>` or `--sim-device <name>` selects and `--sim-width` overrides, and `device_args_help("sim")` gives the matching help text.
+
+```rust
+// From the full argument list: device options are taken out, the rest returned in order.
+let (device, rest) = libdevice::DeviceSpec::extract_args(std::env::args())?;
+
+// From options already split out, with or without the prefix:
+let device = libdevice::DeviceSpec::parse_args(["--device=iphone_15", "--status-bars-top=180"])?;
+```
+
 For the GPU device, enable the `wgpu` feature:
 
 ```toml
