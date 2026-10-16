@@ -62,4 +62,4 @@ Unless you explicitly state otherwise, any contribution intentionally submitted 
 
 | Document | Date | Status | Decision |
 |---|---|---|---|
-| [Device pixel density — ppi per device and millimetre conversions](docs/design/20261015_01_DEVICE_PIXEL_DENSITY_PLAN.md) | 2026-10-15 | In implementation | Adds a required `ppi` per device, mm↔px conversions and `--device-ppi`, leaving all trackpad input to libmorph; approved by the owner on 2026-10-15. |
+| [Device pixel density — ppi per device and millimetre conversions](docs/design/20261015_01_DEVICE_PIXEL_DENSITY_PLAN.md) | 2026-10-15 | Implemented | Adds a required `ppi` per device, mm↔px conversions and `--device-ppi`, leaving all trackpad input to libmorph; all four steps done. |
