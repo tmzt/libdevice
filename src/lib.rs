@@ -1,7 +1,9 @@
 //! Data describing simulated mobile devices.
 //!
 //! Each device in `devices.toml` is compiled into a const [`DeviceSpec`]: its
-//! portrait geometry, pixel ratio, insets, cutouts and display corners.
+//! portrait geometry, pixel ratio, pixel density, insets, cutouts and display
+//! corners. [`DeviceSpec::mm_to_px`] and its siblings convert physical
+//! millimetres on the display to device pixels and back.
 //! [`DeviceSpec::parse_args`] and [`DeviceSpec::extract_args`] select and
 //! override one from `--device` command-line options.
 

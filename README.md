@@ -9,6 +9,7 @@ Data describing simulated mobile devices — screen geometry, pixel ratio, inset
 - **Device specifics** — each device in [`devices.toml`](devices.toml) is compiled into a `DeviceSpec` const (`GALAXY_S24`), listed in `DEVICES` and found by key with `DeviceSpec::by_id`. The first entry is `DEFAULT_DEVICE`.
 - **Insets, cutouts and corners** — every Android `WindowInsets` type is stored per device, and `DeviceSpec::insets(InsetType::…)` also derives the combined types (`SystemBars`, `SafeDrawing`, `SafeGestures`, `SafeContent`), the iOS safe area and CSS `env(safe-area-inset-*)`; `css_safe_area()` gives the latter in CSS pixels. Cutouts are circles, capsules, notches, rectangles or SVG paths, and corners are circular (Android) or continuous (iOS).
 - **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` is the S24's (1080×2340).
+- **Physical size** — every device has its display's `ppi` (the manufacturer's figure), and `px_per_mm`, `mm_to_px`, `px_to_mm` and `physical_size_mm` convert between millimetres and device pixels, for sizes that should match a finger rather than a pixel count. `--device-ppi` overrides it.
 - **Command-line selection** — `--device <name>` and `--device-*` overrides, parsed from filtered options or extracted from a full argument list, under any prefix.
 
 ## Usage
@@ -26,6 +27,8 @@ println!("{}x{}", screen.width, screen.height);
 
 let safe = GALAXY_S24.insets(InsetType::SafeDrawing); // physical pixels
 let css = GALAXY_S24.css_safe_area();                // CSS pixels
+
+let touch_circle = GALAXY_S24.mm_to_px(9.0);         // 147.4 device pixels
 ```
 
 ### Command-line device selection
