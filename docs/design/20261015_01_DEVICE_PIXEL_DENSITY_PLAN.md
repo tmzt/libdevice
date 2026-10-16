@@ -1,7 +1,7 @@
 ---
 title: Device pixel density — ppi per device and millimetre conversions
 date: 2026-10-15
-status: Draft
+status: In implementation
 covers:
   - A required `ppi` (physical pixels per inch) for every device in
     `devices.toml`, carried on `DeviceSpec`
@@ -188,3 +188,10 @@ Each step is its own commit and passes `cargo fmt -- --check`,
    `ydpi` separately. Current phone panels have square pixels, so this plan
    uses one `ppi`. Should it be two fields now, so a non-square panel never
    needs a breaking change?
+
+## Amendment — 2026-10-15 23:37 EDT: implementation started
+
+The owner approved this plan for implementation on 2026-10-15, as written:
+one `ppi` per device (open question 1 answered: no separate horizontal and
+vertical density). Status is now `In implementation`; from this commit the
+document is immutable except by amendment on the owner's instruction.

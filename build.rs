@@ -18,6 +18,7 @@ const DEVICE_FIELDS: &[&str] = &[
     "width",
     "height",
     "pixel_ratio",
+    "ppi",
     "insets",
     "cutouts",
     "corners",
@@ -90,15 +91,8 @@ fn device(out: &mut String, key: &str, value: &Value) -> String {
     };
     let width = positive(device, key, "width");
     let height = positive(device, key, "height");
-    let pixel_ratio = device
-        .get("pixel_ratio")
-        .and_then(|value| {
-            value
-                .as_float()
-                .or_else(|| value.as_integer().map(|i| i as f64))
-        })
-        .filter(|ratio| ratio.is_finite() && *ratio > 0.0)
-        .unwrap_or_else(|| fail(&format!("`{key}.pixel_ratio` must be a positive number")));
+    let pixel_ratio = positive_number(device, key, "pixel_ratio");
+    let ppi = positive_number(device, key, "ppi");
 
     let cutouts: Vec<Cutout> = match device.get("cutouts") {
         None => Vec::new(),
@@ -154,6 +148,7 @@ fn device(out: &mut String, key: &str, value: &Value) -> String {
          platform: Platform::{platform},\n    \
          geometry: PortraitGeometry {{ width: {width}, height: {height} }},\n    \
          pixel_ratio: {pixel_ratio:?},\n    \
+         ppi: {ppi:?},\n    \
          insets: SystemInsets {{"
     )
     .unwrap();
@@ -373,6 +368,20 @@ fn unsigned_value(value: &Value, context: &str) -> u32 {
                 "`{context}` must be a non-negative 32-bit integer"
             ))
         })
+}
+
+/// A positive, finite integer or float, emitted as an `f32` literal.
+fn positive_number(table: &Table, context: &str, field: &str) -> f32 {
+    table
+        .get(field)
+        .and_then(|value| {
+            value
+                .as_float()
+                .or_else(|| value.as_integer().map(|i| i as f64))
+        })
+        .map(|value| value as f32)
+        .filter(|value| value.is_finite() && *value > 0.0)
+        .unwrap_or_else(|| fail(&format!("`{context}.{field}` must be a positive number")))
 }
 
 fn positive(table: &Table, context: &str, field: &str) -> u32 {

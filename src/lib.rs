@@ -33,6 +33,8 @@ pub struct DeviceSpec {
     pub geometry: PortraitGeometry,
     /// Physical pixels per dp, iOS point or CSS pixel.
     pub pixel_ratio: f32,
+    /// Physical pixels per inch of the display.
+    pub ppi: f32,
     pub insets: SystemInsets,
     pub cutouts: &'static [Cutout],
     pub corners: Corners,
@@ -80,6 +82,12 @@ mod tests {
         assert_eq!(GALAXY_S24.geometry.width, 1080);
         assert_eq!(GALAXY_S24.geometry.height, 2340);
         assert_eq!(DEFAULT_DEVICE, GALAXY_S24);
+    }
+
+    #[test]
+    fn ppi_comes_from_devices_toml() {
+        assert_eq!(GALAXY_S24.ppi, 416.0);
+        assert_eq!(IPHONE_15.ppi, 460.0);
     }
 
     #[test]

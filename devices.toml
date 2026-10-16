@@ -6,6 +6,7 @@
 #
 #   platform     "android" or "ios"
 #   pixel_ratio  physical pixels per dp / point / CSS pixel
+#   ppi          physical pixels per inch of the display (manufacturer figure)
 #
 #   [<device>.insets]  Android WindowInsets types, each `{ top, right, bottom,
 #                      left }` with missing sides zero and missing types zero:
@@ -34,6 +35,7 @@ platform = "android"
 width = 1080
 height = 2340
 pixel_ratio = 2.8125 # density 450, a 384 x 832 CSS viewport
+ppi = 416            # spec sheet, 6.2 in display
 
 [galaxy_s24.insets]
 status_bars = { top = 110 }
@@ -62,6 +64,7 @@ platform = "ios"
 width = 1179
 height = 2556
 pixel_ratio = 3
+ppi = 460 # spec sheet, 6.1 in display
 
 [iphone_15.insets]
 status_bars = { top = 162 }
