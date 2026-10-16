@@ -20,6 +20,8 @@ include!(concat!(env!("OUT_DIR"), "/devices.rs"));
 /// Portrait dimensions used by the Samsung Galaxy S24 simulator target.
 pub const GALAXY_S24_PORTRAIT: PortraitGeometry = GALAXY_S24.geometry;
 
+const MM_PER_INCH: f32 = 25.4;
+
 /// Specifics of a simulated device, generated from `devices.toml`.
 ///
 /// Every length is in physical pixels of the portrait display.
@@ -51,6 +53,33 @@ impl DeviceSpec {
     #[must_use]
     pub const fn insets(&self, inset_type: InsetType) -> Insets {
         self.insets.get(inset_type)
+    }
+
+    /// Physical pixels per millimetre of the display: `ppi / 25.4`.
+    #[must_use]
+    pub const fn px_per_mm(&self) -> f32 {
+        self.ppi / MM_PER_INCH
+    }
+
+    /// Millimetres on the display to device pixels.
+    #[must_use]
+    pub const fn mm_to_px(&self, mm: f32) -> f32 {
+        mm * self.px_per_mm()
+    }
+
+    /// Device pixels to millimetres on the display.
+    #[must_use]
+    pub const fn px_to_mm(&self, px: f32) -> f32 {
+        px / self.px_per_mm()
+    }
+
+    /// The display's width and height in millimetres, portrait.
+    #[must_use]
+    pub const fn physical_size_mm(&self) -> (f32, f32) {
+        (
+            self.px_to_mm(self.geometry.width as f32),
+            self.px_to_mm(self.geometry.height as f32),
+        )
     }
 
     /// `env(safe-area-inset-*)` in CSS pixels, for a full-screen page with
@@ -88,6 +117,38 @@ mod tests {
     fn ppi_comes_from_devices_toml() {
         assert_eq!(GALAXY_S24.ppi, 416.0);
         assert_eq!(IPHONE_15.ppi, 460.0);
+    }
+
+    /// The figures in the density plan, section 3.3.
+    #[test]
+    fn conversions_match_the_density_plan() {
+        let close = |actual: f32, expected: f32| {
+            assert!(
+                (actual - expected).abs() < 0.01,
+                "{actual} is not {expected}"
+            );
+        };
+        for (device, px_per_mm, (width, height), circle, offset) in [
+            (GALAXY_S24, 16.378, (65.94, 142.88), 147.40, 122.83),
+            (IPHONE_15, 18.110, (65.10, 141.14), 162.99, 135.83),
+        ] {
+            close(device.px_per_mm(), px_per_mm);
+            let size = device.physical_size_mm();
+            close(size.0, width);
+            close(size.1, height);
+            close(device.mm_to_px(9.0), circle);
+            close(device.mm_to_px(7.5), offset);
+        }
+    }
+
+    #[test]
+    fn mm_and_px_round_trip() {
+        for device in [GALAXY_S24, IPHONE_15] {
+            for mm in [0.0, 0.5, 3.0, 9.0, 142.88] {
+                let back = device.px_to_mm(device.mm_to_px(mm));
+                assert!((back - mm).abs() < 1e-4, "{mm} came back as {back}");
+            }
+        }
     }
 
     #[test]
