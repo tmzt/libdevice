@@ -24,6 +24,7 @@ Device options (lengths in physical pixels):
   --device-width <px>              Portrait width
   --device-height <px>             Portrait height
   --device-pixel-ratio <ratio>     Physical pixels per dp / point / CSS pixel
+  --device-ppi <ppi>               Physical pixels per inch of the display
   --device-platform <platform>     android | ios
   --device-<inset> <px...>         Insets as CSS shorthand: 1-4 values, comma separated
   --device-<inset>-<side> <px>     One side: top | right | bottom | left
@@ -251,12 +252,10 @@ fn apply(
             device.geometry.height = positive(value).ok_or_else(|| invalid("a positive integer"))?
         }
         "pixel-ratio" => {
-            device.pixel_ratio = value
-                .parse::<f32>()
-                .ok()
-                .filter(|ratio| ratio.is_finite() && *ratio > 0.0)
-                .ok_or_else(|| invalid("a positive number"))?;
+            device.pixel_ratio =
+                positive_number(value).ok_or_else(|| invalid("a positive number"))?;
         }
+        "ppi" => device.ppi = positive_number(value).ok_or_else(|| invalid("a positive number"))?,
         "platform" => {
             device.platform = match value {
                 "android" => Platform::Android,
@@ -311,6 +310,15 @@ fn apply(
         }
     }
     Ok(())
+}
+
+/// A positive, finite number.
+fn positive_number(value: &str) -> Option<f32> {
+    value
+        .trim()
+        .parse::<f32>()
+        .ok()
+        .filter(|number| number.is_finite() && *number > 0.0)
 }
 
 fn inset_mut<'a>(insets: &'a mut SystemInsets, name: &str) -> Option<&'a mut Insets> {
@@ -560,6 +568,29 @@ mod tests {
         );
         assert!(device_args_help("--sim").contains("  --sim-device <name>"));
         assert_eq!(device_args_help("device"), DEVICE_ARGS_HELP);
+    }
+
+    #[test]
+    fn ppi_overrides_under_any_prefix() {
+        for args in [["--device-ppi", "300"], ["--ppi", "300"]] {
+            let device = DeviceSpec::parse_args(args).unwrap();
+            assert_eq!(device.ppi, 300.0);
+            assert_eq!(device.geometry, GALAXY_S24.geometry);
+        }
+        let (device, rest) =
+            DeviceSpec::extract_args_with_prefix("sim", ["app", "--sim-ppi=326.5"]).unwrap();
+        assert_eq!((device.ppi, rest), (326.5, vec!["app".to_owned()]));
+        for bad in ["0", "-1", "inf", "NaN", "abc"] {
+            assert_eq!(
+                DeviceSpec::parse_args(["--device-ppi", bad]),
+                Err(DeviceArgsError::InvalidValue {
+                    option: "--device-ppi".into(),
+                    value: bad.into(),
+                    expected: "a positive number",
+                })
+            );
+        }
+        assert!(DEVICE_ARGS_HELP.contains("--device-ppi <ppi>"));
     }
 
     #[test]
