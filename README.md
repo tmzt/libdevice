@@ -54,3 +54,9 @@ at your option.
 ### Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+
+## Architectural decisions
+
+| Document | Date | Status | Decision |
+|---|---|---|---|
+| [Device pixel density — ppi per device and millimetre conversions](docs/design/20261015_01_DEVICE_PIXEL_DENSITY_PLAN.md) | 2026-10-15 | Draft | Adds a required `ppi` per device, mm↔px conversions and `--device-ppi`, leaving all trackpad input to libmorph; Draft pending owner review. |
