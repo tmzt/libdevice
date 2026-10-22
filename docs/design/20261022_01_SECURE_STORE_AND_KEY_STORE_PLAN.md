@@ -213,3 +213,26 @@ opaque-keys amendment, which expected a minor bump. The commit is tagged
    Each would be an amendment to libmobile's secure-store plan.
 2. **Versioning in libdevice.** libdevice has no tags or VERSIONS.md yet.
    Should it adopt libmorph's Rule 5 (VERSIONS.md, tags) with this release?
+
+## Amendment — 2026-10-22 19:15 EDT: open questions settled
+
+Settled with the owner (2026-10-22). Replaces section 6, and the sources
+entry on plan rules.
+
+1. **libmobile's shapes.** libmobile gets an `android::SecureStore`
+   struct (`SecureStore::new(&app)` with this plan's blob methods) next to
+   its functions, and its `SecureStoreError::Jni` becomes `Platform`
+   ("Platform is a better name than Jni"). It is not released, so no
+   existing error is renamed. This is done in libmobile and recorded there
+   when it is implemented. libdevice has no Android code.
+2. **Rules and versions.** libdevice now has an AGENTS.md with the critical
+   rules (CHANGES.md, same date). This release follows them: 0.1.1, tagged
+   `v0.1.1`, with the first `VERSIONS.md` entry in the version commit.
+
+Also, when implementation starts, its first commit renames the error
+variant `Locked` to `DeviceLocked` (the device's screen is locked) in
+both error types of section 3, before anything else. `Locked` is kept for
+keys that must be unlocked before use, which is a later plan. Owner: "Locked
+and DeviceLocked are different state (like in Connectbot, where keys can be
+unlocked to use them)", and "do the rename when we implement, before
+anything else".
