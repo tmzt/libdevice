@@ -293,3 +293,13 @@ section 3.2, and adds to steps 1 to 3. `zeroize` is a dependency of the
   - a migration test, where a test adapter's v2 accepts v1, loads a v1
     key, and finds it stored as v2 afterwards;
   - `WrongKind` for a kind that is not accepted.
+
+## Amendment — 2026-10-22 19:55 EDT: the key store half moves to libmorph's key store plan
+
+The key store in section 3.2, and its parts of sections 2 and 4 and of
+later amendments, are replaced by libmorph
+`docs/design/20261022_05_KEY_STORE_PLAN.md`. libdevice copies that plan's
+engine file and adds a `KeychainVault` and the `MemoryVault`.
+`FLAG_DEVICE_UNLOCK_REQUIRED` is refused on the Keychain rather than
+accepted without being enforced. The blob store half of this plan stands
+as written.
