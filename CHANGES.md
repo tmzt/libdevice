@@ -31,3 +31,14 @@ step 2 of libmorph's `20261022_04_OPAQUE_KEYS_PLAN.md`.
 - The macOS Keychain and memory backends move here from libmorph's
   unpushed `secure-store` branch. A key store with libmobile's API is
   added.
+
+## 2026-10-22 19:15 EDT — The critical rules adopted
+
+On the owner's instruction (2026-10-22): "it should have already adopted
+the critical rules, it might have been overlooked". libdevice gains an
+AGENTS.md with libmorph's critical rules 0 to 5: the CHANGES.md protocol,
+plans and amendments, discussion before changing a plan, commits and
+evidence, the README decision table, and versions and tags with
+VERSIONS.md. Earlier plans used these rules by reference. Version 0.1.0
+predates the rules and has no tag or VERSIONS.md entry. The first entry
+will be the next release.
