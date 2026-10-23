@@ -9,5 +9,21 @@ readme = "README.md"
 keywords = ["simulator", "mobile", "insets", "safe-area", "device"]
 categories = ["simulation", "command-line-interface"]
 
+[features]
+# Small secrets and adapter keys on the desktop, with libmobile's API: the
+# macOS login Keychain (`secure_store`, `key_store`). libdevice's first
+# platform code; off by default.
+secure-store = ["dep:zeroize", "dep:log", "dep:security-framework"]
+# `key_store::Vault::memory()`, an in-memory vault for tests only. Normal
+# app builds do not have it.
+test-vault = ["secure-store"]
+
+[dependencies]
+zeroize = { version = "1.8", features = ["derive"], optional = true }
+log = { version = "0.4", optional = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+security-framework = { version = "3", optional = true }
+
 [build-dependencies]
 toml = { version = "1.1.8", default-features = false, features = ["parse", "preserve_order", "serde"] }

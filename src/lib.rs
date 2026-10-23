@@ -6,9 +6,17 @@
 //! millimetres on the display to device pixels and back.
 //! [`DeviceSpec::parse_args`] and [`DeviceSpec::extract_args`] select and
 //! override one from `--device` command-line options.
+//!
+//! Behind the `secure-store` feature it is also the desktop's platform crate
+//! for secrets: [`secure_store`] (named blobs) and [`key_store`] (adapter
+//! keys), with the same API as libmobile's on Android.
 
 mod args;
 mod insets;
+#[cfg(feature = "secure-store")]
+pub mod key_store;
+#[cfg(feature = "secure-store")]
+pub mod secure_store;
 
 pub use args::{DEFAULT_PREFIX, DEVICE_ARGS_HELP, DeviceArgsError, device_args_help};
 

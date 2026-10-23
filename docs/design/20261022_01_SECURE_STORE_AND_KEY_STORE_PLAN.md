@@ -1,7 +1,7 @@
 ---
 title: Secure store and key store on the desktop
 date: 2026-10-22
-status: Draft
+status: In implementation
 covers:
   - A `secure-store` feature: libdevice's first platform code, kept out of
     the default build
@@ -303,3 +303,24 @@ engine file and adds a `KeychainVault` and the `MemoryVault`.
 `FLAG_DEVICE_UNLOCK_REQUIRED` is refused on the Keychain rather than
 accepted without being enforced. The blob store half of this plan stands
 as written.
+
+## Amendment — 2026-10-22 20:45 EDT: implementation has started; the document is now immutable
+
+The owner said libmorph's key store plan (`20261022_06_KEY_STORE_PLAN.md`)
+is ready to build (2026-10-22); this plan's blob store half is built with
+its step 6, on the `secure-store` branch in its own worktree. In this
+commit:
+- the blob store (`secure_store`, Keychain and memory), with
+  `DeviceLocked` from the start;
+- the key store engine, copied byte for byte from libmobile;
+- `key_store/vault.rs` (Keychain, and memory under `test-vault`).
+
+Host tests pass with `secure-store` and with `test-vault`. Not yet
+checked: the two ignored Keychain tests and the example, which need a
+Terminal session that can show the Keychain prompt.
+
+Departures:
+- `SecureStore::security_level()` returns `SecurityLevel` directly,
+  since nothing on the desktop can fail there.
+- The example has no `--memory` option: the memory key vault exists only
+  under `test-vault`, for tests.
