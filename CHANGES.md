@@ -42,3 +42,24 @@ evidence, the README decision table, and versions and tags with
 VERSIONS.md. Earlier plans used these rules by reference. Version 0.1.0
 predates the rules and has no tag or VERSIONS.md entry. The first entry
 will be the next release.
+
+## 2026-10-22 21:06 EDT — The Keychain backends checked on macOS
+
+Plans: `docs/design/20261022_01_SECURE_STORE_AND_KEY_STORE_PLAN.md` (In
+implementation) and libmorph `docs/design/20261022_06_KEY_STORE_PLAN.md`,
+step 6.
+
+The owner ran these from a Terminal on the Mac mini:
+- The two ignored Keychain tests
+  (`cargo test --features test-vault -- --ignored keychain`): both pass.
+- `cargo run --example securestore --features secure-store`, three times:
+  - it printed `run 1`, `run 2`, `run 3`;
+  - key `device` printed `a5f2b2a72cde2e28`, generated on the first run
+    and loaded on the next two;
+  - the key with `FLAG_DEVICE_UNLOCK_REQUIRED` gave
+    `UnsupportedFlags(1)`.
+- `security find-generic-password -s libdevice.example.keys -a device`
+  found the item in the login keychain.
+
+Before that, the same commands failed with `errSecInteractionNotAllowed`
+(-25308), as they do from a shell that cannot show the Keychain's prompt.
