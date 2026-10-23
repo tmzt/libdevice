@@ -1,7 +1,7 @@
 ---
 title: Secure store and key store on the desktop
 date: 2026-10-22
-status: In implementation
+status: Implemented
 covers:
   - A `secure-store` feature: libdevice's first platform code, kept out of
     the default build
@@ -324,3 +324,21 @@ Departures:
   since nothing on the desktop can fail there.
 - The example has no `--memory` option: the memory key vault exists only
   under `test-vault`, for tests.
+
+## Amendment — 2026-10-22 21:10 EDT: implemented
+
+The blob store half is done, and the key store half was replaced by
+libmorph's `20261022_06_KEY_STORE_PLAN.md` and built from it. It is
+released in libdevice 0.1.1. Commits:
+- Steps 1 and 2: the types, the memory and Keychain backends, and the key
+  store engine and vault: `264dbdb`, with `Debug` for `Vault` in
+  `b52e486`.
+- Step 3, the example: `0ec6127`.
+
+The owner checked both from a Terminal:
+- the two ignored Keychain tests pass;
+- the example counts runs 1 to 4 with the same key fingerprint;
+- `FLAG_DEVICE_UNLOCK_REQUIRED` gives `UnsupportedFlags(1)`;
+- `security find-generic-password` finds the item.
+
+See CHANGES.md.
