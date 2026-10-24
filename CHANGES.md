@@ -73,3 +73,10 @@ libdevice for the Mac, and libmorph wraps both as
 `MorphContext::open_link`.
 
 Proposed only; nothing is implemented until the owner approves.
+
+## 2026-10-23 22:02 EDT — Plans approved
+
+The owner approved, on 2026-10-23 ("approve plans"), with the
+recommended answers:
+- `docs/design/20261023_01_OPEN_LINK_PLAN.md`: feature `open-link`, through
+  `NSWorkspace` on macOS.
