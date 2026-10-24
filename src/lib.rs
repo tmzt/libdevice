@@ -9,12 +9,16 @@
 //!
 //! Behind the `secure-store` feature it is also the desktop's platform crate
 //! for secrets: [`secure_store`] (named blobs) and [`key_store`] (adapter
-//! keys), with the same API as libmobile's on Android.
+//! keys), with the same API as libmobile's on Android. Behind `open-link`,
+//! [`link::open_link`] opens a web link in the default browser, also with
+//! libmobile's API.
 
 mod args;
 mod insets;
 #[cfg(feature = "secure-store")]
 pub mod key_store;
+#[cfg(feature = "open-link")]
+pub mod link;
 #[cfg(feature = "secure-store")]
 pub mod secure_store;
 

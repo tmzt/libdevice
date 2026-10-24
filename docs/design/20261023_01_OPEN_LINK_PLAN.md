@@ -1,7 +1,7 @@
 ---
 title: Opening a link in another app on the desktop
 date: 2026-10-23
-status: Draft
+status: In implementation
 covers:
   - "Feature `open-link`: `open_link(url)` with libmobile's API, on macOS
     through `NSWorkspace`"
@@ -90,3 +90,7 @@ their recommendations stand: http and https only; libmobile's call is
 core, with no Cargo feature; the Mac uses `NSWorkspace`; libmorph's is a
 `MorphContext` method. The status stays `Draft` until the first commit
 that implements it.
+
+## Amendment — 2026-10-23 22:25 EDT: implementation has started; the document is now immutable
+
+Step 1 starts with this commit.

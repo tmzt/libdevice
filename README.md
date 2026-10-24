@@ -11,6 +11,7 @@ Data describing simulated mobile devices — screen geometry, pixel ratio, inset
 - **Portrait geometry** — `PortraitGeometry` describes the simulated screen; `GALAXY_S24_PORTRAIT` is the S24's (1080×2340).
 - **Physical size** — every device has its display's `ppi` (the manufacturer's figure), and `px_per_mm`, `mm_to_px`, `px_to_mm` and `physical_size_mm` convert between millimetres and device pixels, for sizes that should match a finger rather than a pixel count. `--device-ppi` overrides it.
 - **Command-line selection** — `--device <name>` and `--device-*` overrides, parsed from filtered options or extracted from a full argument list, under any prefix.
+- **Opening links** (feature `open-link`, off by default) — `link::open_link(url)` opens an http or https link in the default browser, with the same API as libmobile's on Android. It works on macOS; other desktops get `OpenLinkError::Unsupported`. `link::check_link` is the check it makes first.
 
 ## Usage
 
@@ -64,4 +65,4 @@ Unless you explicitly state otherwise, any contribution intentionally submitted 
 |---|---|---|---|
 | [Device pixel density — ppi per device and millimetre conversions](docs/design/20261015_01_DEVICE_PIXEL_DENSITY_PLAN.md) | 2026-10-15 | Implemented | Adds a required `ppi` per device, mm↔px conversions and `--device-ppi`, leaving all trackpad input to libmorph; all four steps done. |
 | [Secure store and key store on the desktop](docs/design/20261022_01_SECURE_STORE_AND_KEY_STORE_PLAN.md) | 2026-10-22 | Implemented | A `secure-store` feature gives the desktop the same blob store as libmobile on Android (macOS login Keychain, or memory), so libmorph only wraps it. Its key store half moved to libmorph's key store plan, whose engine libdevice copies. The first platform code in libdevice, on the owner's layering rule. Done and checked from a Terminal; released in 0.1.1. |
-| [Opening a link in another app on the desktop](docs/design/20261023_01_OPEN_LINK_PLAN.md) | 2026-10-23 | Draft | Feature `open-link`: `open_link(url)` with libmobile's API, through `NSWorkspace` on macOS and unsupported on other desktops, so libmorph can wrap both. Requested by handlr; approved. |
+| [Opening a link in another app on the desktop](docs/design/20261023_01_OPEN_LINK_PLAN.md) | 2026-10-23 | In implementation | Feature `open-link`: `open_link(url)` with libmobile's API, through `NSWorkspace` on macOS and unsupported on other desktops, so libmorph can wrap both. Requested by handlr; approved, and step 1 is being built. |
