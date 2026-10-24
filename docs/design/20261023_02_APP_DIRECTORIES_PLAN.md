@@ -1,7 +1,7 @@
 ---
 title: The app's data and cache directories on the desktop
 date: 2026-10-23
-status: Draft
+status: In implementation
 covers:
   - "`dirs::data_dir(app_id)` and `cache_dir(app_id)`: each desktop's
     per-user, per-app locations"
@@ -74,3 +74,7 @@ makes sense", relayed by the handlr session); a new `APP_ID`, with
 `<data_dir>/libmorph/`; `None` on the web for now; libdevice computes
 the Linux and Windows paths too. The status stays `Draft` until the
 first commit that implements it.
+
+## Amendment — 2026-10-23 23:34 EDT: implementation has started; the document is now immutable
+
+Step 1 starts with this commit.

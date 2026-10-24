@@ -12,8 +12,12 @@
 //! keys), with the same API as libmobile's on Android. Behind `open-link`,
 //! [`link::open_link`] opens a web link in the default browser, also with
 //! libmobile's API.
+//!
+//! [`dirs::data_dir`] and [`dirs::cache_dir`] give each desktop's per-user
+//! directories for an app id (paths only, nothing is created).
 
 mod args;
+pub mod dirs;
 mod insets;
 #[cfg(feature = "secure-store")]
 pub mod key_store;
