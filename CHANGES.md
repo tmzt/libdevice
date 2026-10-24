@@ -80,3 +80,20 @@ The owner approved, on 2026-10-23 ("approve plans"), with the
 recommended answers:
 - `docs/design/20261023_01_OPEN_LINK_PLAN.md`: feature `open-link`, through
   `NSWorkspace` on macOS.
+
+## 2026-10-23 22:25 EDT — Open link step 1: small additions
+
+Plan: `docs/design/20261023_01_OPEN_LINK_PLAN.md` (In implementation),
+step 1.
+
+- `OpenLinkError` also implements `Display` and `std::error::Error`,
+  as `SecureStoreError` does, so callers can use `?` with boxed errors.
+- On macOS, a link that passes `check_link` but that `NSURL` will not
+  parse (`URLWithString:` returns nil) is `BadUrl`. The plan names no
+  error for it.
+- The macOS call runs inside its own autorelease pool, so a call from a
+  thread without one does not leak.
+- `check_link` reads the host as the authority after `://`, up to the
+  first `/`, `?` or `#`, after any `user@` and before any `:port`;
+  an IPv6 literal is the text inside `[...]`. libmobile's copy should
+  agree on these cases for libmorph's equality test.
