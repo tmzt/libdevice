@@ -11,12 +11,15 @@
 //! for secrets: [`secure_store`] (named blobs) and [`key_store`] (adapter
 //! keys), with the same API as libmobile's on Android. Behind `open-link`,
 //! [`link::open_link`] opens a web link in the default browser, also with
-//! libmobile's API.
+//! libmobile's API. Behind `clipboard`, [`clipboard::read_text`] reads the
+//! clipboard's text, for pasting.
 //!
 //! [`dirs::data_dir`] and [`dirs::cache_dir`] give each desktop's per-user
 //! directories for an app id (paths only, nothing is created).
 
 mod args;
+#[cfg(feature = "clipboard")]
+pub mod clipboard;
 pub mod dirs;
 mod insets;
 #[cfg(feature = "secure-store")]

@@ -1,7 +1,7 @@
 ---
 title: Reading text from the clipboard on the desktop
 date: 2026-10-24
-status: Draft
+status: In implementation
 covers:
   - "Feature `clipboard`: `clipboard::read_text() -> Option<String>`, on
     macOS through `NSPasteboard`"
@@ -51,3 +51,7 @@ for Backspace. They are built after the notification and dark mode work
 and released after it (libmobile 0.2.7, the next libdevice release,
 libmorph 0.4.4), so they do not hold it up. The status stays `Draft`
 until the first commit that implements it.
+
+## Amendment — 2026-10-24 16:19 EDT: implementation has started; the document is now immutable
+
+Step 1 starts with this commit.
