@@ -97,3 +97,13 @@ step 1.
   first `/`, `?` or `#`, after any `user@` and before any `:port`;
   an IPv6 literal is the text inside `[...]`. libmobile's copy should
   agree on these cases for libmorph's equality test.
+
+## 2026-10-23 23:30 EDT — App storage directories (proposed)
+
+Plan: `docs/design/20261023_02_APP_DIRECTORIES_PLAN.md` (Draft). On the owner's request, relayed by the
+handlr session: "libmorph should provide a persistent storage location on
+all platforms, with mkdir_all". libmobile gives Android's files and cache
+directories, libdevice the desktop paths by app id, and libmorph creates
+them before `init` as `MorphContext::storage_dir()` and `cache_dir()`.
+
+Proposed only; nothing is implemented until the owner approves.
