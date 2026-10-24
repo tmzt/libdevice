@@ -136,3 +136,12 @@ Plans: `docs/design/20261023_01_OPEN_LINK_PLAN.md` and
 the owner's word ("approve, bump versions if needed and release"):
 libdevice 0.1.2 (tag `v0.1.2`), with `open-link` and `dirs`, all
 additions.
+
+## 2026-10-24 16:15 EDT — Text input (proposed)
+
+Plan: `docs/design/20261024_01_CLIPBOARD_PLAN.md` (Draft). Requested by the handlr session with the
+owner's "yes": the soft keyboard with options, the action key and
+dismissal (libmobile), paste on the desktop (libdevice), and one text
+input API and hook in libmorph on every host.
+
+Proposed only; nothing is implemented until the owner approves.
