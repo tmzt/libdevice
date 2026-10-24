@@ -128,3 +128,11 @@ implementation), step 1.
 - An `XDG_*` value counts as absolute when it starts with `/`, so the
   XDG rule gives the same answer when tested on any host.
 - With `HOME` unset, an absolute `XDG_*` value is still used.
+
+## 2026-10-23 23:35 EDT — Released libdevice 0.1.2
+
+Plans: `docs/design/20261023_01_OPEN_LINK_PLAN.md` and
+`docs/design/20261023_02_APP_DIRECTORIES_PLAN.md` (both Implemented). On
+the owner's word ("approve, bump versions if needed and release"):
+libdevice 0.1.2 (tag `v0.1.2`), with `open-link` and `dirs`, all
+additions.
