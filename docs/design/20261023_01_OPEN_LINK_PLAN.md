@@ -1,7 +1,7 @@
 ---
 title: Opening a link in another app on the desktop
 date: 2026-10-23
-status: In implementation
+status: Implemented
 covers:
   - "Feature `open-link`: `open_link(url)` with libmobile's API, on macOS
     through `NSWorkspace`"
@@ -94,3 +94,10 @@ that implements it.
 ## Amendment — 2026-10-23 22:25 EDT: implementation has started; the document is now immutable
 
 Step 1 starts with this commit.
+
+## Amendment — 2026-10-23 23:35 EDT: implemented
+
+Every step is done:
+1. 13d4787 (step 1, with 0603c22, CHANGES).
+2. libdevice 0.1.2 (`678b1a5`, tag `v0.1.2`), on the owner's word
+   ("approve, bump versions if needed and release").

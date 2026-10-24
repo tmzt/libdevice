@@ -1,7 +1,7 @@
 ---
 title: The app's data and cache directories on the desktop
 date: 2026-10-23
-status: In implementation
+status: Implemented
 covers:
   - "`dirs::data_dir(app_id)` and `cache_dir(app_id)`: each desktop's
     per-user, per-app locations"
@@ -78,3 +78,10 @@ first commit that implements it.
 ## Amendment — 2026-10-23 23:34 EDT: implementation has started; the document is now immutable
 
 Step 1 starts with this commit.
+
+## Amendment — 2026-10-23 23:35 EDT: implemented
+
+Every step is done:
+1. fc4ccdc (step 1, with d9c0b8b, CHANGES).
+2. libdevice 0.1.2 (`678b1a5`, tag `v0.1.2`), on the owner's word
+   ("approve, bump versions if needed and release").
