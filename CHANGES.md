@@ -63,3 +63,13 @@ The owner ran these from a Terminal on the Mac mini:
 
 Before that, the same commands failed with `errSecInteractionNotAllowed`
 (-25308), as they do from a shell that cannot show the Keychain's prompt.
+
+## 2026-10-23 21:59 EDT — Opening a link in another app (proposed)
+
+Plan: `docs/design/20261023_01_OPEN_LINK_PLAN.md` (Draft). Requested by the handlr
+session for repowiki links in its agent view: an outbound call that opens
+an http or https URL in the browser. libmobile builds it for Android,
+libdevice for the Mac, and libmorph wraps both as
+`MorphContext::open_link`.
+
+Proposed only; nothing is implemented until the owner approves.
