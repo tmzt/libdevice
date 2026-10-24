@@ -114,3 +114,17 @@ The owner approved the app storage plans in libmobile, libdevice and
 libmorph ("approved plan and start"): `data_dir()` on every host with a
 filesystem, `Option` kept for the web, a new `MorphApp::APP_ID`, and a
 new `cache_dir()`. libmobile and libdevice are built first.
+
+## 2026-10-23 23:34 EDT — App directories step 1: small departures
+
+Plan: `docs/design/20261023_02_APP_DIRECTORIES_PLAN.md` (In
+implementation), step 1.
+
+- An empty `HOME`, `APPDATA` or `LOCALAPPDATA` counts as unset, so
+  it gives `None` rather than a relative path. Empty `XDG_*` values
+  are ignored, like relative ones.
+- iOS, which is a Unix target, gets `None` like Android rather than the
+  XDG rule: the plan's rules are for desktops.
+- An `XDG_*` value counts as absolute when it starts with `/`, so the
+  XDG rule gives the same answer when tested on any host.
+- With `HOME` unset, an absolute `XDG_*` value is still used.
