@@ -1,7 +1,7 @@
 ---
 title: Reading text from the clipboard on the desktop
 date: 2026-10-24
-status: In implementation
+status: Implemented
 covers:
   - "Feature `clipboard`: `clipboard::read_text() -> Option<String>`, on
     macOS through `NSPasteboard`"
@@ -55,3 +55,12 @@ until the first commit that implements it.
 ## Amendment — 2026-10-24 16:19 EDT: implementation has started; the document is now immutable
 
 Step 1 starts with this commit.
+
+## Amendment — 2026-10-29 17:36 EDT: implemented
+
+Every step is done:
+1. 31cc51a (step 1). Its check was run again on 2026-10-29 on the
+   owner's Mac: after `echo hello | pbcopy`, the example prints 6.
+2. libdevice 0.1.3 (`e4a3a15`, tag `v0.1.3`), released with
+   `docs/design/20261029_01_CLIPBOARD_WRITE_PLAN.md`, on the owner's word
+   ("approve all four plans and build them", "push them when built").
