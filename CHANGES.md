@@ -173,3 +173,22 @@ The owner approved it on 2026-10-29 ("approve all four plans and build
 them"), with the plan's proposed answers: no concealed type for now, and
 Linux and Windows stay `Unsupported`. Released with the clipboard read as
 libdevice 0.1.3 ("push them when built").
+
+## 2026-10-29 17:35 EDT — Clipboard write step 1 departures
+
+Plan: `docs/design/20261029_01_CLIPBOARD_WRITE_PLAN.md` (In
+implementation), step 1 (`8fd4bf9`). Small additions beyond section 2's
+file list:
+
+- `src/lib.rs`: the crate docs name `clipboard::write_text` beside
+  `read_text`.
+- `examples/clipboard.rs`: `--write` exits 1 when the write fails (after
+  printing the error), and any other arguments print a usage line and
+  exit 2, so a script can rely on the exit code as well as on `ok`.
+- No crate feature was added: objc2-app-kit 0.2's `NSPasteboard` feature
+  already has `clearContents` and `setString_forType`.
+
+The step's Mac script exited 0 on the owner's Mac (the non-ASCII text
+round-tripped through `pbpaste`, and a write replaced text put there by
+`pbcopy`); the read plan's check (`echo hello | pbcopy`, then the example
+prints 6) still holds.
