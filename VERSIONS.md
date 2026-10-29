@@ -39,3 +39,22 @@ additions. The commit is the one tagged `v0.1.2`.
 - **The module `dirs`** (core, no dependencies): `data_dir(app_id)` and
   `cache_dir(app_id)`, the per-user, per-app paths on macOS, Linux and
   other Unix (XDG) and Windows; `None` elsewhere or for a bad id.
+
+## 0.1.3 — 2026-10-29 (tag `v0.1.3`)
+
+Reading and writing the clipboard's text
+(`docs/design/20261024_01_CLIPBOARD_PLAN.md` and
+`docs/design/20261029_01_CLIPBOARD_WRITE_PLAN.md`). All additions, behind
+a feature that is off by default. The commit is the one tagged `v0.1.3`.
+
+- **Feature `clipboard`:** the module `clipboard`, with
+  - `read_text() -> Option<String>`: the clipboard's plain text (macOS
+    through the general `NSPasteboard`; `None` on other desktops);
+  - `write_text(text) -> Result<(), ClipboardError>`: the clipboard
+    cleared, then given `text` as plain text (macOS through the general
+    `NSPasteboard`; `Unsupported` on other desktops);
+  - `ClipboardError` (`#[non_exhaustive]`: `Unsupported`,
+    `Platform(String)`), which implements `Display` and `Error`.
+
+  On macOS it uses `objc2` 0.5, `objc2-foundation` 0.2 and
+  `objc2-app-kit` 0.2, as `open-link` does.
