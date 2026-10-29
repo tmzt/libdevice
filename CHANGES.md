@@ -192,3 +192,17 @@ The step's Mac script exited 0 on the owner's Mac (the non-ASCII text
 round-tripped through `pbpaste`, and a write replaced text put there by
 `pbcopy`); the read plan's check (`echo hello | pbcopy`, then the example
 prints 6) still holds.
+
+## 2026-10-29 17:36 EDT — Released libdevice 0.1.3
+
+Plans: `docs/design/20261024_01_CLIPBOARD_PLAN.md` (Implemented) and
+`docs/design/20261029_01_CLIPBOARD_WRITE_PLAN.md` (In implementation). On
+the owner's word ("approve all four plans and build them", "push them when
+built"): libdevice 0.1.3 (`e4a3a15`, tag `v0.1.3`), with the clipboard
+read and write, all additions.
+
+The write plan stays In implementation: its step 2 is done when the
+commit is tagged `v0.1.3` (it is) and libmorph builds on macOS against it
+with `write_text` called from its clipboard module, which libmorph's own
+clipboard write plan builds next. Its `Implemented` amendment follows
+then.
