@@ -151,3 +151,17 @@ Proposed only; nothing is implemented until the owner approves.
 Plan: `docs/design/20261024_01_CLIPBOARD_PLAN.md` (Draft, approved). The owner approved the text
 input plans ("yes"), with the recommended answers. Released after the
 notification and dark mode work.
+
+## 2026-10-29 17:31 EDT — Writing text to the clipboard (proposed)
+
+Plan: `docs/design/20261029_01_CLIPBOARD_WRITE_PLAN.md` (Draft). Requested
+through the RoundTwo session for Copy buttons on its mock interview
+results; the owner chose to "Plan it in the libraries [...] each under its
+own rules and version". The `clipboard` feature gains
+`clipboard::write_text(&str) -> Result<(), ClipboardError>`: the macOS
+pasteboard cleared, then given the text as `public.utf8-plain-text`;
+`Unsupported` on other desktops. The macOS half of libmorph's plan of the
+same name; libmobile's plan of the same name is the Android half. For
+libdevice 0.1.3, released with the clipboard read.
+
+Proposed only; nothing is implemented until the owner approves.
