@@ -12,7 +12,8 @@
 //! keys), with the same API as libmobile's on Android. Behind `open-link`,
 //! [`link::open_link`] opens a web link in the default browser, also with
 //! libmobile's API. Behind `clipboard`, [`clipboard::read_text`] reads the
-//! clipboard's text, for pasting.
+//! clipboard's text, for pasting, and [`clipboard::write_text`] writes it,
+//! for copying.
 //!
 //! [`dirs::data_dir`] and [`dirs::cache_dir`] give each desktop's per-user
 //! directories for an app id (paths only, nothing is created).

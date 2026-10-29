@@ -1,7 +1,7 @@
 ---
 title: Writing text to the clipboard on the desktop
 date: 2026-10-29
-status: Draft
+status: In implementation
 covers:
   - "Feature `clipboard` gains `clipboard::write_text(text: &str) ->
     Result<(), ClipboardError>`: on macOS, the general pasteboard's
@@ -193,3 +193,14 @@ additive there too.
   already; Apple documents no main-thread requirement for it. If the
   write misbehaves off the main thread, libmorph calls it from its event
   loop's thread (the main thread on macOS) anyway.
+
+## Amendment — 2026-10-29 17:34 EDT: approved; implementation started
+
+The owner approved this plan on 2026-10-29, with the other clipboard write
+plans (libmobile's and libmorph's): "approve all four plans and build
+them", and "push them when built". The open questions take the proposed
+answers: no concealed or transient type for now (section 5, question 1),
+and Linux and Windows stay `Unsupported` (section 5, question 2).
+
+Implementation has started with this commit (step 1); the document is now
+immutable.

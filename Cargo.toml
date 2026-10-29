@@ -20,8 +20,9 @@ test-vault = ["secure-store"]
 # `link::open_link`: open an http or https link in the default browser, with
 # libmobile's API. macOS through NSWorkspace; other desktops are unsupported.
 open-link = ["dep:objc2", "dep:objc2-foundation", "dep:objc2-app-kit"]
-# `clipboard::read_text`: the clipboard's text on the desktop. macOS through
-# NSPasteboard; other desktops get None.
+# `clipboard::read_text` and `write_text`: read and write the clipboard's text
+# on the desktop. macOS through NSPasteboard; other desktops read None and
+# cannot write (`ClipboardError::Unsupported`).
 clipboard = ["dep:objc2", "dep:objc2-foundation", "dep:objc2-app-kit"]
 
 [dependencies]
