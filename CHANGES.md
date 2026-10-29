@@ -165,3 +165,11 @@ same name; libmobile's plan of the same name is the Android half. For
 libdevice 0.1.3, released with the clipboard read.
 
 Proposed only; nothing is implemented until the owner approves.
+
+## 2026-10-29 17:33 EDT — Writing text to the clipboard approved
+
+Plan: `docs/design/20261029_01_CLIPBOARD_WRITE_PLAN.md` (Draft, approved).
+The owner approved it on 2026-10-29 ("approve all four plans and build
+them"), with the plan's proposed answers: no concealed type for now, and
+Linux and Windows stay `Unsupported`. Released with the clipboard read as
+libdevice 0.1.3 ("push them when built").
