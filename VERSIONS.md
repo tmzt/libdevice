@@ -58,3 +58,21 @@ a feature that is off by default. The commit is the one tagged `v0.1.3`.
 
   On macOS it uses `objc2` 0.5, `objc2-foundation` 0.2 and
   `objc2-app-kit` 0.2, as `open-link` does.
+
+## 0.1.4 — 2026-11-19 (tag `v0.1.4`)
+
+The free and total space of a volume on the desktop
+(`docs/design/20261119_01_DISK_SPACE_PLAN.md`). All additions, behind a
+feature that is off by default. The commit is the one tagged `v0.1.4`.
+
+- **Feature `disk-space`:** the module `disk_space`, with
+  - `space(path: &Path) -> Result<DiskSpace, DiskSpaceError>`: the volume
+    holding `path`, through `statvfs` on macOS, Linux and other Unix
+    (`free = f_bavail * f_frsize`, `total = f_blocks * f_frsize`,
+    saturating); `Unsupported` on Windows and wasm32;
+  - `DiskSpace` (`#[non_exhaustive]`: `free: u64`, `total: u64`);
+  - `DiskSpaceError` (`#[non_exhaustive]`: `Path(String)`, `Unsupported`,
+    `Platform(String)`), which implements `Display` and `Error`.
+
+  On Unix it adds `libc` 0.2 (optional, only with the feature); Windows
+  and wasm32 build it without `libc`.
