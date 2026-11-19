@@ -212,3 +212,35 @@ then.
 Plan: [Disk space and disk pressure on the desktop, from one engine file shared with libmobile](docs/design/20261119_01_DISK_SPACE_PLAN.md) (Draft).
 
 Planned new work on the owner's decision of 2026-11-19 (\"just have the subagent do it and follow the critical rules, must be tested and share API with libmorph\"): a `disk-space` feature with `disk_space::space` and the disk-space engine shared byte for byte with libmobile, for libdevice 0.1.4. No code until the owner approves the plan.
+
+## 2026-11-19 18:59 EST — Disk space step 1 built; released libdevice 0.1.4
+
+Plan: [Disk space and disk pressure on the desktop, from one engine file shared with libmobile](docs/design/20261119_01_DISK_SPACE_PLAN.md) (In implementation), as amended to the low-level call only. On the owner's word ("approve and build"):
+
+- Step 1 (`f7a8ffd`): feature `disk-space`, `disk_space::space`,
+  `DiskSpace { free, total }` and `DiskSpaceError`, `libc` 0.2 as a
+  `cfg(unix)` optional dependency. Its **Done when:** holds: `cargo fmt
+  -- --check`; `cargo clippy --all-targets` with no features and
+  `--all-features`, no warnings (also with `--features disk-space` on
+  `x86_64-unknown-linux-gnu` and `x86_64-pc-windows-gnu`); `cargo test
+  --all-features` on the Mac, 57 passed and 2 ignored (the existing
+  Keychain tests), 3 doc tests; `cargo check --features disk-space
+  --target x86_64-pc-windows-gnu` builds, and `cargo tree` there shows no
+  `libc`; on the Mac, `space($HOME)` and `df -k ~` agree exactly
+  (482797652 KiB total, 5990856 KiB free, read back to back).
+- Step 2: README feature line (`976a073`); version 0.1.4 with its
+  `VERSIONS.md` entry (`9e9afd0`, tag `v0.1.4`, not pushed).
+
+Small choices within the plan (Rule 1.7), no interface change:
+
+- `DiskSpaceError::Path` is returned for a path holding a NUL byte and
+  for statvfs's `ENOENT`, `ENOTDIR`, `EACCES`, `ELOOP` and
+  `ENAMETOOLONG`; any other errno is `Platform`. Both messages name the
+  path and the OS error.
+- The `VERSIONS.md` heading follows this file's earlier entries
+  (`(tag v0.1.4)`, without the commit's own short hash, which the commit
+  cannot contain).
+
+The plan stays In implementation: step 2 is done when libmorph's desktop
+`disk_space` builds and passes its tests against 0.1.4, which libmorph's
+disk pressure plan builds next. Its `Implemented` amendment follows then.
