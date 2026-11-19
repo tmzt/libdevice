@@ -188,3 +188,65 @@ libmorph takes it without a minor bump.
 - **APFS purgeable space.** On macOS, `statvfs` free excludes purgeable
   space that Finder counts as available, so the Mac may grade lower than
   Finder suggests. Conservative for a cache; noted in `space`'s docs.
+
+## Amendment — 2026-11-19 18:36 EST: the low-level call only; no grading and no shared engine file
+
+The owner decided on 2026-11-19, through the ShotToss coordinator
+(verbatim): "we can provide the low-level API in libmobile/libdevice and
+the high-level grading in libmorph, this doesn't have the security
+considerations of keystore (which is what the source-level checks are
+for)". That answer is the agreement for this amendment. This plan has no
+earlier amendment. It replaces, in the original text:
+
+- **Section 2 entirely** ("One engine file, and how its identity is
+  checked", with its recommendation): there is no
+  `src/disk_space/engine.rs`, no `ENGINE_SOURCE`, no libmorph equality
+  test and no `cmp` against libmobile. libdevice's types are its own.
+- **Section 3's engine block** by libdevice's own, in `src/disk_space.rs`
+  (feature `disk-space`):
+
+  ```rust
+  /// A volume's space, in bytes, from statvfs.
+  #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+  #[non_exhaustive]
+  pub struct DiskSpace { pub free: u64, pub total: u64 }
+
+  #[derive(Clone, Debug, PartialEq, Eq)]
+  #[non_exhaustive]
+  pub enum DiskSpaceError { Path(String), Unsupported, Platform(String) }
+
+  /// free = f_bavail * f_frsize, total = f_blocks * f_frsize, saturating.
+  /// macOS, Linux and other Unix; Err(Unsupported) on Windows and wasm32.
+  /// Any thread, microseconds.
+  pub fn space(path: &Path) -> Result<DiskSpace, DiskSpaceError>;
+  ```
+
+  `DiskSpace` has no `allocatable` or `cache_quota`: the desktop has
+  neither. `DiskPressure`, `DiskThresholds`, `grade`,
+  `DiskPressureReport`, `statvfs_space` as a separate name, the interval
+  constants and `clamp_interval` are removed; grading, thresholds and the
+  schedule are libmorph's (its disk pressure plan, amended the same day),
+  and libmorph converts this `DiskSpace` into its own type. "The grade"
+  paragraph is removed.
+- **Section 4**: `libc` stays a `cfg(unix)` optional dependency of
+  `disk-space`; the text about the engine is removed.
+- **Section 5** by: `space(&std::env::temp_dir())` gives `total > 0` and
+  `free <= total` on Unix and `Unsupported` elsewhere; a missing path is
+  `Path`; the saturating multiply at `u64::MAX`. The grading table, the
+  interval clamp and the identical-file check are removed.
+- **Step 1** by: **the call.** `src/disk_space.rs`, the feature, the
+  dependency, `lib.rs`'s module. **Done when:** `cargo fmt -- --check`;
+  `cargo clippy --all-targets` with no features and `--all-features`: no
+  warnings; `cargo test --all-features` passes on the Mac with the tests
+  above; `cargo check --features disk-space --target
+  x86_64-pc-windows-gnu` builds without `libc`; on the Mac, `space` of
+  the home directory matches `df -k ~` within one block. It no longer
+  waits for libmobile.
+- **Step 2's Done when** by: tagged `v0.1.4`, and libmorph's desktop
+  `disk_space` builds and passes its tests against it.
+- **Section 8's first risk** ("Two copies drift") is removed; the APFS
+  purgeable-space risk stays.
+- **The title's "from one engine file shared with libmobile"** no longer
+  holds; the plan gives the desktop's free and total space.
+
+Versioning stands: additive, 0.1.3 to 0.1.4.
