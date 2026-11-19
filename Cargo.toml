@@ -24,10 +24,17 @@ open-link = ["dep:objc2", "dep:objc2-foundation", "dep:objc2-app-kit"]
 # on the desktop. macOS through NSPasteboard; other desktops read None and
 # cannot write (`ClipboardError::Unsupported`).
 clipboard = ["dep:objc2", "dep:objc2-foundation", "dep:objc2-app-kit"]
+# `disk_space::space`: the free and total bytes of the volume holding a path.
+# statvfs on macOS, Linux and other Unix; `DiskSpaceError::Unsupported` on
+# Windows and wasm32, where libc is not used.
+disk-space = ["dep:libc"]
 
 [dependencies]
 zeroize = { version = "1.8", features = ["derive"], optional = true }
 log = { version = "0.4", optional = true }
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2", optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 security-framework = { version = "3", optional = true }

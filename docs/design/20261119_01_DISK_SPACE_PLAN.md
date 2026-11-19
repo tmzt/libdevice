@@ -1,7 +1,7 @@
 ---
 title: Disk space and disk pressure on the desktop, from one engine file shared with libmobile
 date: 2026-11-19
-status: Draft
+status: In implementation
 covers:
   - "Feature `disk-space`: `disk_space::space(path)` on macOS, Linux and other Unix through statvfs, `Unsupported` on Windows and the web"
   - "The disk-space engine, `src/disk_space/engine.rs`: `DiskSpace`, `DiskPressure`, `DiskThresholds::grade`, `DiskPressureReport`, `DiskSpaceError`, `statvfs_space` and the check-interval constants, byte-identical in libmobile and libdevice, with an `ENGINE_SOURCE` check in libmorph"
@@ -250,3 +250,10 @@ earlier amendment. It replaces, in the original text:
   holds; the plan gives the desktop's free and total space.
 
 Versioning stands: additive, 0.1.3 to 0.1.4.
+
+## Amendment — 2026-11-19 18:58 EST: implementation started; the document is now immutable
+
+The owner approved this plan, as amended, on 2026-11-19 ("approve and
+build"). Implementation starts with step 1 in the commit that adds this
+amendment; `status` is now `In implementation`, and the document is
+immutable from here on, changed only on the owner's explicit instruction.

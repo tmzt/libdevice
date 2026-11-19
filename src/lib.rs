@@ -13,7 +13,8 @@
 //! [`link::open_link`] opens a web link in the default browser, also with
 //! libmobile's API. Behind `clipboard`, [`clipboard::read_text`] reads the
 //! clipboard's text, for pasting, and [`clipboard::write_text`] writes it,
-//! for copying.
+//! for copying. Behind `disk-space`, [`disk_space::space`] gives the free
+//! and total bytes of the volume holding a path.
 //!
 //! [`dirs::data_dir`] and [`dirs::cache_dir`] give each desktop's per-user
 //! directories for an app id (paths only, nothing is created).
@@ -22,6 +23,8 @@ mod args;
 #[cfg(feature = "clipboard")]
 pub mod clipboard;
 pub mod dirs;
+#[cfg(feature = "disk-space")]
+pub mod disk_space;
 mod insets;
 #[cfg(feature = "secure-store")]
 pub mod key_store;
