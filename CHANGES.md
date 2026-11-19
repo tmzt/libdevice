@@ -206,3 +206,9 @@ commit is tagged `v0.1.3` (it is) and libmorph builds on macOS against it
 with `write_text` called from its clipboard module, which libmorph's own
 clipboard write plan builds next. Its `Implemented` amendment follows
 then.
+
+## 2026-11-19 18:31 EST — Disk space and disk pressure on the desktop, planned
+
+Plan: [Disk space and disk pressure on the desktop, from one engine file shared with libmobile](docs/design/20261119_01_DISK_SPACE_PLAN.md) (Draft).
+
+Planned new work on the owner's decision of 2026-11-19 (\"just have the subagent do it and follow the critical rules, must be tested and share API with libmorph\"): a `disk-space` feature with `disk_space::space` and the disk-space engine shared byte for byte with libmobile, for libdevice 0.1.4. No code until the owner approves the plan.
